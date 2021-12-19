@@ -3,25 +3,17 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useState, useEffect } from 'react'
-import { useQuill } from "react-quilljs"
 import RowComponent from '../components/RowComponent'
 import { supabase } from '../utils/supabaseClient'
 import Auth from '../components/Auth'
 import Account from '../components/Account'
+import NewRowComponent from '../components/NewRowComponent'
 
 const Home: NextPage = () => {
-  const { quill, quillRef } = useQuill();
   const [data, setData] = useState<any>();
+  const [showDialog, setShowDialog] = useState(false);
+  const [session, setSession] = useState<any>(null);
 
-  //const [session, setSession] = useState<any>(null)
-
-  //useEffect(() => {
-  //setSession(supabase.auth.session())
-
-  //supabase.auth.onAuthStateChange((_event, session) => {
-  //setSession(session)
-  //})
-  //}, [])
   const getData = async () => {
     const { data: LectureLineaire, error } = await supabase
     .from("LectureLineaire")
@@ -35,18 +27,16 @@ const Home: NextPage = () => {
     }
   }
 
-  useEffect(() => {
-    getData()
-  }, [])
 
   useEffect(() => {
-    if (quill) {
-      quill.on("text-change", (delta, oldDelta, source) => {
-        console.log("Text change!");
-        console.log(quill.root.innerHTML); // Get innerHTML using quill
-      });
-    }
-  }, [quill]);
+    setSession(supabase.auth.session())
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    getData()
+  }, [])
 
   return (
     <div className={styles.container}>
@@ -56,35 +46,17 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {/*
-          *<div style={{ width: "600px", height: "300px" }}>
-          *  <div ref={quillRef} />
-          *</div>
-          */}
-        {/*
-          *{!session ? <Auth /> : <Account key={session.user.id} session={session} />}
-          */}
-        <div className="flex flex-row justify-between flex-nowrap">
-          <RowComponent
-            title="Test"
-            extract="sq<b>d</b>fuiqs"
-            videoLink="youtube.com/watch?v=319fd82"
-            introduction="qsdfqs"
-            explanation="sqdfsd"
-          />
-          <RowComponent
-            title="Test"
-            extract="sq<b>d</b>fuiqs<br /> <br /> <br /> fqsd"
-            videoLink="youtube.com/watch?v=319fd82"
-            introduction="qsdfqs"
-            explanation="sqdfsd"
-          />
+        {!session ? <Auth /> : <Account key={session.user.id} session={session} />}
+        <div className="flex flex-row justify-between p-4 overflow-scroll flex-nowrap">
           {
             // map data and display RowComponent with key
+            // enumerate data
+
             data &&
-              data.map((item: any) => {
+              data.map((item: any, index: number) => {
               return (
                 <RowComponent
+                  key={index}
                   title={item.title}
                   extract={item.extract}
                   videoLink={item.videoLink}
@@ -94,7 +66,17 @@ const Home: NextPage = () => {
               );
             })
           }
+          <button 
+            className="buttonDefault shrink-0 h-fit" 
+            onClick={() => setShowDialog(true)}
+          >
+            Ajouter nouvelle lecture 
+            <svg xmlns="http://www.w3.org/2000/svg" className="inline w-6 h-6 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>          </button>
         </div>
+        <NewRowComponent isOpen={showDialog} close={() => {setShowDialog(false); getData()}} />
+
       </main>
     </div>
   );

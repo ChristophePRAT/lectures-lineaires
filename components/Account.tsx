@@ -2,25 +2,53 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
 
-export default function Account({ session }) {
-	const [loading, setLoading] = useState(true)
-	const [username, setUsername] = useState(null)
-	const [website, setWebsite] = useState(null)
-	const [avatar_url, setAvatarUrl] = useState(null)
+enum AccessLevel {
+	Unauthenticated = -1,
+	Viewer = 0,
+	Contributor = 1,
+	Admin = 2,
+}
 
+function Account({session} : { session: any}) {
+	const [loading, setLoading] = useState(true)
+	const [accessLevel, setAccessLevel] = useState<AccessLevel>(AccessLevel.Unauthenticated);
 	useEffect(() => {
 		getProfile()
-	}, [session])
+		// if user doesn't have a profile, create one
+		if (accessLevel != -1) {
+			createProfile()
+		}
 
+	}, [session])
+	async function createProfile() {
+		const profile = {
+			id: session.user.id,
+			email: session.user.email,
+			access_level: 0
+		}
+		const { error } = await supabase
+		.from('profiles')
+		.upsert(profile, {
+			returning: 'minimal', // Don't return the value after inserting
+		})
+		if (error) {
+			console.log(error)
+		}
+		console.log("Should have added user")
+	}
 	async function getProfile() {
 		try {
 			setLoading(true)
 			const user = supabase.auth.user()
 
+			if (!user?.id) {
+				setLoading(false)
+				return
+			}
 			let { data, error, status } = await supabase
 			.from('profiles')
-			.select(`username, website, avatar_url`)
-			.eq('id', user.id)
+			.select(`access_level`)
+			.eq('id', user.id!)
 			.single()
 
 			if (error && status !== 406) {
@@ -28,38 +56,9 @@ export default function Account({ session }) {
 			}
 
 			if (data) {
-				setUsername(data.username)
-				setWebsite(data.website)
-				setAvatarUrl(data.avatar_url)
+				setAccessLevel(data.access_level)
 			}
-		} catch (error) {
-			alert(error.message)
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	async function updateProfile({ username, website, avatar_url }) {
-		try {
-			setLoading(true)
-			const user = supabase.auth.user()
-
-			const updates = {
-				id: user.id,
-				username,
-				website,
-				avatar_url,
-				updated_at: new Date(),
-			}
-
-			let { error } = await supabase.from('profiles').upsert(updates, {
-				returning: 'minimal', // Don't return the value after inserting
-			})
-
-			if (error) {
-				throw error
-			}
-		} catch (error) {
+		} catch (error: any) {
 			alert(error.message)
 		} finally {
 			setLoading(false)
@@ -69,43 +68,21 @@ export default function Account({ session }) {
 	return (
 		<div className="form-widget">
 			<div>
-				<label htmlFor="email">Email</label>
-				<input id="email" type="text" value={session.user.email} disabled />
+				<label htmlFor="email">Adresse mail</label>
+				<input className="px-3" id="email" type="text" value={session.user.email} disabled />
 			</div>
 			<div>
-				<label htmlFor="username">Name</label>
-				<input
-					id="username"
-					type="text"
-					value={username || ''}
-					onChange={(e) => setUsername(e.target.value)}
-				/>
+				<label htmlFor="access_level">Niveau d'accès</label>
+				<input className="px-3" id="access_level" type="text" value={accessLevel} title={AccessLevel[accessLevel]} disabled />
 			</div>
 			<div>
-				<label htmlFor="website">Website</label>
-				<input
-					id="website"
-					type="website"
-					value={website || ''}
-					onChange={(e) => setWebsite(e.target.value)}
-				/>
-			</div>
-
-			<div>
-				<button
-					className="button block primary"
-					onClick={() => updateProfile({ username, website, avatar_url })}
-					disabled={loading}
-				>
-					{loading ? 'Loading ...' : 'Update'}
-				</button>
-			</div>
-
-			<div>
-				<button className="button block" onClick={() => supabase.auth.signOut()}>
-					Sign Out
+				<button className="block button buttonDefault" onClick={() => supabase.auth.signOut()}>
+					Se déconnecter
 				</button>
 			</div>
 		</div>
 	)
 }
+
+
+export default Account

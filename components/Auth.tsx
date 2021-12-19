@@ -5,13 +5,13 @@ export default function Auth() {
 	const [loading, setLoading] = useState(false)
 	const [email, setEmail] = useState('')
 
-	const handleLogin = async (email) => {
+	const handleLogin = async (email: string) => {
 		try {
 			setLoading(true)
 			const { error } = await supabase.auth.signIn({ email })
 			if (error) throw error
-				alert('Check your email for the login link!')
-		} catch (error) {
+				alert('Mail de confirmation d\'adresse envoyé !')
+		} catch (error: any) {
 			alert(error.error_description || error.message)
 		} finally {
 			setLoading(false)
@@ -19,15 +19,14 @@ export default function Auth() {
 	}
 
 	return (
-		<div className="row flex flex-center">
+		<div className="flex row flex-center">
 			<div className="col-6 form-widget">
-				<h1 className="header">Supabase + Next.js</h1>
-				<p className="description">Sign in via magic link with your email below</p>
+				<p className="description">S&apos;enregistrer avec un lien magique</p>
 				<div>
 					<input
-						className="inputField"
+						className="p-2 m-4 border-2 rounded focus:outline-none border-slate-300 focus:ring-2 focus:ring-bg-blue-100"
 						type="email"
-						placeholder="Your email"
+						placeholder="Votre adresse mail"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 					/>
@@ -38,10 +37,10 @@ export default function Auth() {
 							e.preventDefault()
 							handleLogin(email)
 						}}
-						className="button block"
+						className="block button buttonDefault"
 						disabled={loading}
 					>
-						<span>{loading ? 'Loading' : 'Send magic link'}</span>
+						<span>{loading ? 'Chargement...' : 'Envoyer le lien magique'}</span>
 					</button>
 				</div>
 			</div>
