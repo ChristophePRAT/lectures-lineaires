@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
+import useLocalStorage from '../utils/useLocalStorage';
 
 enum AccessLevel {
 	Unauthenticated = -1,
@@ -12,13 +13,14 @@ enum AccessLevel {
 function Account({session} : { session: any}) {
 	const [loading, setLoading] = useState(true)
 	const [accessLevel, setAccessLevel] = useState<AccessLevel>(AccessLevel.Unauthenticated);
+	const [localAccessLevel, setLocalAccessLevel] = useLocalStorage("access_level", AccessLevel.Unauthenticated.toString());
+
 	useEffect(() => {
 		getProfile()
 		// if user doesn't have a profile, create one
-		if (accessLevel != -1) {
+		if (accessLevel == -1) {
 			createProfile()
 		}
-
 	}, [session])
 	async function createProfile() {
 		const profile = {
@@ -57,6 +59,7 @@ function Account({session} : { session: any}) {
 
 			if (data) {
 				setAccessLevel(data.access_level)
+				setLocalAccessLevel(data.access_level.toString())
 			}
 		} catch (error: any) {
 			alert(error.message)
@@ -72,7 +75,7 @@ function Account({session} : { session: any}) {
 				<input className="px-3" id="email" type="text" value={session.user.email} disabled />
 			</div>
 			<div>
-				<label htmlFor="access_level">Niveau d'accès</label>
+				<label htmlFor="access_level">Niveau d&apos;accès</label>
 				<input className="px-3" id="access_level" type="text" value={accessLevel} title={AccessLevel[accessLevel]} disabled />
 			</div>
 			<div>
