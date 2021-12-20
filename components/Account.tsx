@@ -13,14 +13,9 @@ enum AccessLevel {
 function Account({session} : { session: any}) {
 	const [loading, setLoading] = useState(true)
 	const [accessLevel, setAccessLevel] = useState<AccessLevel>(AccessLevel.Unauthenticated);
-	const [localAccessLevel, setLocalAccessLevel] = useLocalStorage("access_level", AccessLevel.Unauthenticated.toString());
 
 	useEffect(() => {
 		getProfile()
-		// if user doesn't have a profile, create one
-		if (accessLevel == -1) {
-			createProfile()
-		}
 	}, [session])
 	async function createProfile() {
 		const profile = {
@@ -55,11 +50,13 @@ function Account({session} : { session: any}) {
 
 			if (error && status !== 406) {
 				throw error
+			} else if (status === 406) {
+				console.log("No account yet")
+				createProfile()
 			}
 
 			if (data) {
 				setAccessLevel(data.access_level)
-				setLocalAccessLevel(data.access_level.toString())
 			}
 		} catch (error: any) {
 			alert(error.message)
