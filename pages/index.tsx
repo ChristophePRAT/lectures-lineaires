@@ -7,6 +7,7 @@ import { supabase } from '../utils/supabaseClient'
 import Auth from '../components/Auth'
 import Account from '../components/Account'
 import NewRowComponent from '../components/NewRowComponent'
+import useLocalStorage from '../utils/useLocalStorage';
 
 const Home: NextPage = () => {
   const [data, setData] = useState<any>();
@@ -14,7 +15,7 @@ const Home: NextPage = () => {
   const [session, setSession] = useState<any>(null);
   const [editData, setEditData] = useState<any>();
 
-  const [access_level, setAccessLevel] = useState(-1);
+  const [access_level, _] = useLocalStorage('access_level', -1);
 
   const getData = async () => {
     const { data: LectureLineaire, error } = await supabase
@@ -38,8 +39,6 @@ const Home: NextPage = () => {
     })
 
     getData()
-    setAccessLevel(JSON.parse(localStorage.getItem("access_level") ?? "-1"))
-
   }, [])
 
   return (

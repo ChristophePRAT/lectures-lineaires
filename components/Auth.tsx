@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
+import useLocalStorage from '../utils/useLocalStorage'
 
 export default function Auth() {
 	const [loading, setLoading] = useState(false)
 	const [email, setEmail] = useState('')
+	const [access_level, setAccessLevel] = useLocalStorage("access_level", -1);
 
 	const handleLogin = async (email: string) => {
 		try {
@@ -18,7 +20,7 @@ export default function Auth() {
 		}
 	}
 	useEffect(() => {
-		localStorage.setItem("access_level", JSON.stringify(-1))
+		setAccessLevel(-1)
 	}, [])
 	return (
 		<div className="flex row flex-center">

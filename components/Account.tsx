@@ -12,11 +12,12 @@ enum AccessLevel {
 
 function Account({session} : { session: any}) {
 	const [loading, setLoading] = useState(true)
-	const [accessLevel, setAccessLevel] = useState<AccessLevel>(AccessLevel.Unauthenticated);
+	const [accessLevel, setAccessLevel] = useLocalStorage<AccessLevel>("access_level", AccessLevel.Unauthenticated);
 
 	useEffect(() => {
 		getProfile()
 	}, [session])
+
 	async function createProfile() {
 		const profile = {
 			id: session.user.id,
@@ -56,9 +57,7 @@ function Account({session} : { session: any}) {
 			}
 
 			if (data) {
-				setAccessLevel(data.access_level);
-				localStorage.setItem("access_level", JSON.stringify(data.access_level))
-
+				setAccessLevel(data.access_level)
 			}
 		} catch (error: any) {
 			alert(error.message)
