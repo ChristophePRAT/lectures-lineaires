@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useState, useEffect } from 'react'
 import RowComponent from '../components/RowComponent'
@@ -13,6 +12,9 @@ const Home: NextPage = () => {
   const [data, setData] = useState<any>();
   const [showDialog, setShowDialog] = useState(false);
   const [session, setSession] = useState<any>(null);
+  const [editData, setEditData] = useState<any>();
+
+  const [access_level, setAccessLevel] = useState(-1);
 
   const getData = async () => {
     const { data: LectureLineaire, error } = await supabase
@@ -36,6 +38,8 @@ const Home: NextPage = () => {
     })
 
     getData()
+    setAccessLevel(JSON.parse(localStorage.getItem("access_level") ?? "-1"))
+
   }, [])
 
   return (
@@ -57,27 +61,31 @@ const Home: NextPage = () => {
               return (
                 <RowComponent
                   key={index}
+                  id={item.id}
                   title={item.title}
                   extract={item.extract}
                   videoLink={item.videoLink}
                   introduction={item.introduction}
                   explanation={item.explanation}
-                  access_level={session.access_level}
+                  access_level={access_level}
+                  onEdit={() => {setShowDialog(true); setEditData(item)}}
                 />
               );
             })
           }
-          <button 
-            className="buttonDefault shrink-0 h-fit" 
-            onClick={() => setShowDialog(true)}
-          >
-            Ajouter nouvelle lecture 
-            <svg xmlns="http://www.w3.org/2000/svg" className="inline w-6 h-6 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>          </button>
+          { access_level > 0 &&
+            <button 
+              className="buttonDefault shrink-0 h-fit" 
+              onClick={() => setShowDialog(true)}
+            >
+              Ajouter nouvelle lecture 
+              <svg xmlns="http://www.w3.org/2000/svg" className="inline w-6 h-6 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>          
+            </button>
+          }
         </div>
-        <NewRowComponent isOpen={showDialog} close={() => {setShowDialog(false); getData()}} />
-
+        <NewRowComponent isOpen={showDialog} {...editData} close={() => {setShowDialog(false); getData()}} />
       </main>
     </div>
   );

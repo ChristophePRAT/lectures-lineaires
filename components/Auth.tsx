@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../utils/supabaseClient'
 
 export default function Auth() {
@@ -17,7 +17,9 @@ export default function Auth() {
 			setLoading(false)
 		}
 	}
-
+	useEffect(() => {
+		localStorage.setItem("access_level", JSON.stringify(-1))
+	}, [])
 	return (
 		<div className="flex row flex-center">
 			<div className="col-6 form-widget">

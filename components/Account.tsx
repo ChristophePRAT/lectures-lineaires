@@ -56,7 +56,9 @@ function Account({session} : { session: any}) {
 			}
 
 			if (data) {
-				setAccessLevel(data.access_level)
+				setAccessLevel(data.access_level);
+				localStorage.setItem("access_level", JSON.stringify(data.access_level))
+
 			}
 		} catch (error: any) {
 			alert(error.message)

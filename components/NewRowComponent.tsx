@@ -5,12 +5,21 @@ const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import { Dialog } from "@headlessui/react"
 import styles from '../styles/NewRowComponent.module.scss';
 
-const NewRowComponent = (props: { isOpen: boolean, close: ()=>void }) => {
-	const [title, setTitle] = useState('');
-	const [extract, setExtract] = useState('');
-	const [videoLink, setVideoLink] = useState('');
-	const [introduction, setIntroduction] = useState('');
-	const [explanation, setExplanation] = useState('');
+function NewRowComponent(props: { 
+	isOpen: boolean, 
+	close: () => void, 
+	editTitle?: string,
+	editExtract?: string,
+	editVideoLink?: string,
+	editIntroduction?: string,
+	editExplanation?: string,
+	id?: any,
+}) {
+	const [title, setTitle] = useState(props.editTitle ?? "");
+	const [extract, setExtract] = useState(props.editExtract ?? "");
+	const [videoLink, setVideoLink] = useState(props.editVideoLink ?? "");
+	const [introduction, setIntroduction] = useState(props.editIntroduction ?? "");
+	const [explanation, setExplanation] = useState(props.editExplanation ?? "");
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -30,10 +39,18 @@ const NewRowComponent = (props: { isOpen: boolean, close: ()=>void }) => {
 			introduction,
 			explanation
 		};
-		const response = await supabase
-		.from('LectureLineaire')
-		.insert([newRow]);
-		console.log(response);
+		if (props.id) {
+			const response = await supabase
+			.from("LectureLineaire")
+			.upsert([{
+				id: props.id,
+				...newRow
+			}])
+		} else {
+			const response = await supabase
+			.from('LectureLineaire')
+			.upsert([newRow]);
+		}
 		props.close();
 		setTitle('');
 		setExtract('');
