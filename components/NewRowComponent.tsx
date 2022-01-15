@@ -34,11 +34,11 @@ function NewRowComponent(props: {
 			introduction,
 			explanation
 		};
-		if (props.id) {
+		if (props.lecture?.id) {
 			const response = await supabase
 			.from("LectureLineaire")
 			.upsert([{
-				id: props.id,
+				id: props.lecture?.id,
 				...newRow
 			}])
 		} else {
