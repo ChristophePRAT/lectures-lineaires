@@ -110,8 +110,10 @@ const Home: NextPage = () => {
           close={onDismiss}
         />
         }
-
       </main>
+      <footer>
+        © Copyright - {new Date().getFullYear()} - Christophe P.
+      </footer>
     </div>
   );
 }
