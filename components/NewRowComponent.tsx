@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '../utils/supabaseClient';
+import { supabase, LectureLineaire } from '../utils/supabaseClient';
 import dynamic from 'next/dynamic';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import { Dialog } from "@headlessui/react"
@@ -8,18 +8,13 @@ import styles from '../styles/NewRowComponent.module.scss';
 function NewRowComponent(props: { 
 	isOpen: boolean, 
 	close: () => void, 
-	editTitle?: string,
-	editExtract?: string,
-	editVideoLink?: string,
-	editIntroduction?: string,
-	editExplanation?: string,
-	id?: any,
+	lecture?: LectureLineaire,
 }) {
-	const [title, setTitle] = useState(props.editTitle ?? "");
-	const [extract, setExtract] = useState(props.editExtract ?? "");
-	const [videoLink, setVideoLink] = useState(props.editVideoLink ?? "");
-	const [introduction, setIntroduction] = useState(props.editIntroduction ?? "");
-	const [explanation, setExplanation] = useState(props.editExplanation ?? "");
+	const [title, setTitle] = useState(props.lecture?.title ?? "");
+	const [extract, setExtract] = useState(props.lecture?.extract ?? "");
+	const [videoLink, setVideoLink] = useState(props.lecture?.videoLink ?? "");
+	const [introduction, setIntroduction] = useState(props.lecture?.introduction ?? "");
+	const [explanation, setExplanation] = useState(props.lecture?.explanation ?? "");
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();

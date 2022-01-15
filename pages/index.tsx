@@ -3,18 +3,19 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { useState, useEffect } from 'react'
 import RowComponent from '../components/RowComponent'
-import { supabase } from '../utils/supabaseClient'
+import { supabase, LectureLineaire } from '../utils/supabaseClient'
 import Auth from '../components/Auth'
 import Account from '../components/Account'
 import NewRowComponent from '../components/NewRowComponent'
 import useLocalStorage from '../utils/useLocalStorage';
 
+
 const Home: NextPage = () => {
   const [data, setData] = useState<any>();
   const [showDialog, setShowDialog] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [session, setSession] = useState<any>(null);
-  const [editData, setEditData] = useState<any>();
-
+  const [editData, setEditData] = useState<LectureLineaire>();
   const [access_level, _] = useLocalStorage('access_level', -1);
 
   const getData = async () => {
@@ -23,11 +24,29 @@ const Home: NextPage = () => {
     .select()
 
     if (error) {
-      console.log(error)
+      console.error(error)
     } else {
-      console.log(LectureLineaire)
       setData(LectureLineaire)
     }
+  }
+  const onDismiss = () => {
+    setEditData(undefined);
+    getData();
+    setShowDialog(false);
+  }
+  const onEdit = (item: any) => {
+    setEditData(
+      {
+        id: item.id,
+        title: item.title,
+        introduction: item.introduction,
+        explanation: item.explanation,
+        extract: item.extract,
+        videoLink: item.videoLink,
+      });
+      console.log("Edit Data: ")
+      console.table(editData)
+      setShowDialog(true)
   }
 
 
@@ -67,7 +86,7 @@ const Home: NextPage = () => {
                   introduction={item.introduction}
                   explanation={item.explanation}
                   access_level={access_level}
-                  onEdit={() => {setShowDialog(true); setEditData(item)}}
+                  onEdit={() => onEdit(item)}
                 />
               );
             })
@@ -84,7 +103,14 @@ const Home: NextPage = () => {
             </button>
           }
         </div>
-        <NewRowComponent isOpen={showDialog} {...editData} close={() => {setShowDialog(false); getData()}} />
+        { showDialog &&
+        <NewRowComponent 
+          isOpen={showDialog} 
+          lecture={editData && editData}
+          close={onDismiss}
+        />
+        }
+
       </main>
     </div>
   );

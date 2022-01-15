@@ -68,9 +68,9 @@ function Account({session} : { session: any}) {
 
 	return (
 		<div className="form-widget">
-			<div>
+			<div className="w-full">
 				<label htmlFor="email">Adresse mail</label>
-				<input className="px-3" id="email" type="text" value={session.user.email} disabled />
+				<input className="w-1/5 px-3" id="email" type="text" value={session.user.email} disabled />
 			</div>
 			<div>
 				<label htmlFor="access_level">Niveau d&apos;accès</label>
