@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase, LectureLineaire } from '../utils/supabaseClient';
 import dynamic from 'next/dynamic';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -10,11 +10,16 @@ function NewRowComponent(props: {
 	close: () => void, 
 	lecture?: LectureLineaire,
 }) {
-	const [title, setTitle] = useState(props.lecture?.title ?? "");
-	const [extract, setExtract] = useState(props.lecture?.extract ?? "");
-	const [videoLink, setVideoLink] = useState(props.lecture?.videoLink ?? "");
-	const [introduction, setIntroduction] = useState(props.lecture?.introduction ?? "");
-	const [explanation, setExplanation] = useState(props.lecture?.explanation ?? "");
+	const [title, setTitle] = useState(props.lecture?.title.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
+	const [extract, setExtract] = useState(props.lecture?.extract.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
+	const [videoLink, setVideoLink] = useState(props.lecture?.videoLink.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
+	const [introduction, setIntroduction] = useState(props.lecture?.introduction.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
+	const [explanation, setExplanation] = useState(props.lecture?.explanation.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
+
+	useEffect(() => {
+		console.log(props.lecture?.explanation)
+		console.log("\n\n" + explanation)
+	})
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -78,7 +83,7 @@ function NewRowComponent(props: {
 						theme="snow"
 						value={extract}
 						className={styles.textarea}
-						onChange={(e: any) => setExtract(e)}
+						onChange={(e: string) => setExtract(e)}
 					/>
 					<br />
 					<ReactQuill
@@ -92,7 +97,7 @@ function NewRowComponent(props: {
 						theme="snow"
 						value={explanation}
 						className={styles.textarea}
-						onChange={(e: any) => setExplanation(e)}
+						onChange={(e: string) => setExplanation(e)}
 					/>
 					<br />
 					<input 

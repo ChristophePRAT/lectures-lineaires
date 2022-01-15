@@ -34,6 +34,8 @@ const Home: NextPage = () => {
     setShowDialog(false);
   }
   const onEdit = (item: any) => {
+    console.table(item);
+    console.log(item.explanation)
     setEditData(
       {
         id: item.id,
@@ -43,10 +45,13 @@ const Home: NextPage = () => {
         extract: item.extract,
         videoLink: item.videoLink,
       });
-      console.log("Edit Data: ")
-      console.table(editData)
       setShowDialog(true)
   }
+
+  useEffect(() => {
+    console.log("Edit Data: ")
+    console.log(editData?.introduction)
+  }, [editData])
 
 
   useEffect(() => {
@@ -74,7 +79,7 @@ const Home: NextPage = () => {
             // enumerate data
 
             data &&
-              data.map((item: any, index: number) => {
+              data.map((item: LectureLineaire, index: number) => {
               return (
                 <RowComponent
                   key={index}

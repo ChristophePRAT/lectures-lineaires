@@ -14,7 +14,7 @@ function HTMLDisclosure(data: { title: string, html: string }) {
 							} w-5 h-5 text-blue-500`}
 						/>
 					</Disclosure.Button>
-					<Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-800">
+					<Disclosure.Panel className="px-4 pt-4 pb-2 text-base text-gray-800 leading-7">
 						<div dangerouslySetInnerHTML={{ __html: data.html }} />
 					</Disclosure.Panel>
 				</>
