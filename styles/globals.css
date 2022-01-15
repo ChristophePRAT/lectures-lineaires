@@ -24,3 +24,8 @@ a {
 .buttonDefault {
   @apply self-center px-4 py-2 mx-3 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent cursor-pointer rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 hover:bg-blue-200;
 }
+
+ul {
+  list-style: disc;
+}
+
