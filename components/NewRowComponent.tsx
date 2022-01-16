@@ -10,12 +10,11 @@ function NewRowComponent(props: {
 	close: () => void, 
 	lecture?: LectureLineaire,
 }) {
-	const [title, setTitle] = useState(props.lecture?.title.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
-	const [extract, setExtract] = useState(props.lecture?.extract.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
-	const [videoLink, setVideoLink] = useState(props.lecture?.videoLink.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
-	const [introduction, setIntroduction] = useState(props.lecture?.introduction.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
-	const [explanation, setExplanation] = useState(props.lecture?.explanation.replaceAll("<p><br></p>", "<p>\n</p>") ?? "");
-
+	const [title, setTitle] = useState(props.lecture?.title ?? "");
+	const [videoLink, setVideoLink] = useState(props.lecture?.videoLink ?? "");
+	const [extract, setExtract] = useState(props.lecture?.extract.replaceAll("</p>", "</p>\n") ?? "");
+	const [introduction, setIntroduction] = useState(props.lecture?.introduction.replaceAll("</p>", "</p>\n") ?? "");
+	const [explanation, setExplanation] = useState(props.lecture?.explanation.replaceAll("</p>", "</p>\n") ?? "");
 	useEffect(() => {
 		console.log(props.lecture?.explanation)
 		console.log("\n\n" + explanation)
