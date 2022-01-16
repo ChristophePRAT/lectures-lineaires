@@ -23,7 +23,7 @@ const RowComponent = (data: { id: any, title: string, extract: string, videoLink
 					<div className="flex justify-between w-full p-2 text-lg font-bold bg-blue-500">
 						<h2>{data.title}</h2>
 						<div>
-							<a href={data.videoLink} target="_blank">
+							<a href={data.videoLink} target="_blank" rel="noreferrer">
 								<svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-6 h-6 m-2 align-middle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
 								</svg>
