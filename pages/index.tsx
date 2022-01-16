@@ -116,7 +116,7 @@ const Home: NextPage = () => {
         }
       </main>
       <footer className={styles.footer}>
-        © Copyright - {new Date().getFullYear()} - Christophe P.
+        © Copyrights - {new Date().getFullYear()} - Christophe P.
       </footer>
     </div>
   );
