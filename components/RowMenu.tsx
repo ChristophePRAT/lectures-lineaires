@@ -2,7 +2,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
-export default function RowMenu(props: { onDelete: ()=>void, onEdit: ()=>void }) {
+export default function RowMenu(props: { onDelete: ()=>void, onEdit: ()=>void, access_level: number }) {
 	return (
 		<Menu as="div" className="relative inline-block text-left">
 			<div>
@@ -48,6 +48,7 @@ export default function RowMenu(props: { onDelete: ()=>void, onEdit: ()=>void })
 								</button>
 							)}
 						</Menu.Item>
+						{ props.access_level > 2 &&
 						<Menu.Item>
 							{({ active }) => (
 								<button
@@ -71,6 +72,7 @@ export default function RowMenu(props: { onDelete: ()=>void, onEdit: ()=>void })
 								</button>
 							)}
 						</Menu.Item>
+						}
 					</div>
 				</Menu.Items>
 			</Transition>
