@@ -78,6 +78,7 @@ function NewRowComponent(props: {
 						value={videoLink}
 						onChange={(e: any) => setVideoLink(e.target.value)} 
 					/> 
+					<h2 className={styles.sectionTitle}>Extrait</h2>
 					<ReactQuill 
 						theme="snow"
 						value={extract}
@@ -85,6 +86,7 @@ function NewRowComponent(props: {
 						onChange={(e: string) => setExtract(e)}
 					/>
 					<br />
+					<h2 className={styles.sectionTitle}>Introduction</h2>
 					<ReactQuill
 						theme="snow"
 						value={introduction}
@@ -92,6 +94,7 @@ function NewRowComponent(props: {
 						onChange={(e: any) => setIntroduction(e)}
 					/>
 					<br />
+					<h2 className={styles.sectionTitle}>Analyse</h2>
 					<ReactQuill
 						theme="snow"
 						value={explanation}
