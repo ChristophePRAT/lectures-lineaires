@@ -19,14 +19,11 @@
   @apply text-xs text-gray-500;
 }
 
-.footer a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-}
-
-
 .lectureslineaires {
   @apply flex flex-col justify-between p-4 overflow-scroll md:flex-row flex-nowrap;
 }
+
+.lectureslineaires::-webkit-scrollbar {
+  @apply md:hidden;
+}
+
