@@ -73,7 +73,7 @@ const Home: NextPage = () => {
       </Head>
       <main className={styles.main}>
         {!session ? <Auth /> : <Account key={session.user.id} session={session} />}
-        <div className="flex flex-row justify-between p-4 overflow-scroll flex-nowrap">
+        <div className={styles.lectureslineaires}>
           {
             // map data and display RowComponent with key
             // enumerate data
@@ -116,7 +116,7 @@ const Home: NextPage = () => {
         }
       </main>
       <footer className={styles.footer}>
-        © Copyrights - {new Date().getFullYear()} - Christophe P.
+        © Copyrights - {new Date().getFullYear()} - Christophe P. (code) & SFA 1ère 3 &#8920;3
       </footer>
     </div>
   );
