@@ -10,15 +10,29 @@ function NewRowComponent(props: {
 	close: () => void, 
 	lecture?: LectureLineaire,
 }) {
-	const [title, setTitle] = useState(props.lecture?.title ?? "");
-	const [videoLink, setVideoLink] = useState(props.lecture?.videoLink ?? "");
-	const [extract, setExtract] = useState(props.lecture?.extract.replaceAll("</p>", "</p>\n") ?? "");
-	const [introduction, setIntroduction] = useState(props.lecture?.introduction.replaceAll("</p>", "</p>\n") ?? "");
-	const [explanation, setExplanation] = useState(props.lecture?.explanation.replaceAll("</p>", "</p>\n") ?? "");
+	const [title, setTitle] = useState("");
+	const [videoLink, setVideoLink] = useState("");
+	const [extract, setExtract] = useState("");
+	const [introduction, setIntroduction] = useState("");
+	const [explanation, setExplanation] = useState("");
 	useEffect(() => {
-		console.log(props.lecture?.explanation)
-		console.log("\n\n" + explanation)
-	})
+		if (props.lecture) {
+			setTitle(props.lecture.title);
+			setVideoLink(props.lecture.videoLink);
+			setExtract(
+				props.lecture.extract
+				.replaceAll("&nbsp;", "\n")
+			);
+			setIntroduction(
+				props.lecture.introduction
+				.replaceAll("&nbsp;", "\n")
+			);
+			setExplanation(
+				props.lecture.explanation
+				.replaceAll("&nbsp;", "\n")
+			);
+		}
+	}, [props.lecture]);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
