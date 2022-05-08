@@ -19,7 +19,7 @@ const RowComponent = (data: { id: any, title: string, extract: string, videoLink
 	if (show) {
 		return (
 			<>
-				<div className="flex-col flex-auto m-1 overflow-hidden text-white rounded-lg shadow-lg md:w-1/2 md:m-5 shrink-0 p-x-1 md:p-x-4 h-fit">
+				<div className="flex-col flex-auto m-1 overflow-hidden text-white rounded-lg shadow-lg md:w-11/12 md:m-5 shrink-0 p-x-1 md:p-x-4 h-fit">
 					<div className="flex items-center justify-between w-full p-2 text-lg font-bold bg-blue-500">
 						<h2>{data.title}</h2>
 						<div className="flex flex-row">

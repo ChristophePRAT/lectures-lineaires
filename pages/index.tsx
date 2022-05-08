@@ -80,7 +80,14 @@ const Home: NextPage = () => {
             // enumerate data
 
             data &&
-              data.map((item: LectureLineaire, index: number) => {
+              data
+            .sort((a: any, b: any) => {
+                const regex = /(?<=LL)\d{1,}/g;
+                const aNum = a.title.match(regex)?.[0]
+                const bNum = b.title.match(regex)?.[0]
+                return aNum - bNum
+          })
+              .map((item: LectureLineaire, index: number) => {
               return (
                 <RowComponent
                   key={index}
