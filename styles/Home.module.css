@@ -20,8 +20,7 @@
 }
 
 .lectureslineaires {
-  @apply flex flex-col justify-between p-4 overflow-scroll md:flex-row flex-nowrap;
-    overflow-y: hidden
-
+  @apply flex flex-col justify-between p-4 overflow-scroll md:flex-row md:flex-nowrap;
+  overflow-y: hidden
 }
 
